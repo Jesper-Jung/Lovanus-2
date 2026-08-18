@@ -62,3 +62,17 @@ These are links to the ratified versions of the extensions.
 | `Zicsr` v2.0 | [Unprivileged ISA 20191213](https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf) |
 | Machine ISA v1.12 | [Privileged Architecture 20211203](https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf) |
 | Debug v0.13.2 | [RISC-V External Debug Support 20190322](https://riscv.org/wp-content/uploads/2019/03/riscv-debug-release.pdf) |
+
+
+# Milestone
+
+1. RV32I ISA Set 으로 single-cycle CPU 제작 & 간단한 테스트벤치
+2. Pipelining Fetch stage & TestBench
+3. APB & AHB 버스 도입 및 JTAG 디버그 모듈 탑재 (from Hazard3)
+4. [Optional] UVM or Cocotb 도입
+5. FPGA 빌드 (iCEbreaker)
+6. RV32IM_Zicsr 확장 & 인터럽트 설계
+7. Peripheral 추가 설계 (UART 만)
+8. FFT 모듈 설계 및 확장
+... TBD
+
