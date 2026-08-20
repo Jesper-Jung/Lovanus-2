@@ -1,0 +1,74 @@
+
+// @Title: Voodoo Child
+// @Artist: Jimi Handrix
+// @BPM: 88~89
+
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Intro   |   Intro   |   Intro   |   Intro   |
+
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+
+//  Verse1  |   Verse1  |   Verse1  |   Verse1  |   Verse1  |   Verse1  |
+//  Verse1  |   Verse1  |   Verse1  |   Verse1  |
+//  Chorus  | ( Chorus )|   Chorus  |   Chorus  |
+//( Chorus  |   Chorus )|   Chorus  |   Chorus  |
+
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+//  G. Solo |   G. Solo |   Main    |   Main    |
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+//  Main    |   Main    |   Main    |   Main    |       # Decrease
+
+//  Verse2  |   Verse2  |   Verse2  |   Verse2  |
+//  Verse2  |   Verse2  |   Verse2  |   Verse2  |       # Increase
+//  Verse2  |   Verse2  |   Verse2  |   Verse2  |   Verse2  |   Verse2  |
+//( Chorus  |   Chorus )|   Chorus  |   Chorus  |
+//( Chorus  |   Chorus )|   Chorus  |   Chorus  |
+
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+//  G. Solo |   G. Solo |   Main    |   Main    |
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+
+// ## Outro Jam ## (음원 상으론 24마디 이후 Fade Out)
+//  G. Solo |   G. Solo |   Main    |   Main    |
+//  G. Solo |   G. Solo |   Main    |   Main    |
+//  G. Solo |   G. Solo |   Main    |   Main    |
+//  ....
+
+
+
+
+// @Title: Third Stone from the Sun
+// @Artist: Jimi Handrix
+// @BPM: 114~115
+
+// ## Bebop (Swing) ##
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Intro   |   Intro   |   Intro   |   Intro   |
+//  Bridge  |   Bridge  |   Bridge  |   Bridge  |
+
+// ## 8 Beat ##
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |   Main    |   Main    |
+//  Bridge  |   Bridge  |   Bridge  |   Bridge  |
+
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+//  G. Solo |   G. Solo |   G. Solo |   G. Solo |
+
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+//  Main    |   Main    |   Main    |   Main    |
+//  Turn    |   Turn    |
+
+// ## Free Jam, Bebop ##
+// ... more Avantgarde
+
