@@ -10,12 +10,22 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * Module Name: u_imm_gen
-//  * Purpose
+//  * Module Name   : u_ModuleName
+//  * Author        : Jesper
+//  * Purpose       :
 //
-//  * Note
+//  * Note          :
+//      | See '2.3 Immediate encoding variant' of the RISC-V unpriviliged document.  
 //
-//  * Reference
+//  * Reference     :
 //
 //=================================================================* * * * *---*
 
+module ModuleName #(
+
+) (
+     input                  clk_i
+    ,input                  rst_ni
+);
+
+endmodule
