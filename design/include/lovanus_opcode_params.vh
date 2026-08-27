@@ -10,7 +10,7 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * File Name     : lovanus_opcode.vh
+//  * File Name     : lovanus_opcode_params.vh
 //  * Author        : Jesper
 //  * Purpose       : Parameterize RISC-V Opcode's in a core designing module
 //
@@ -28,34 +28,37 @@
 //  * Reference     :
 //
 //=================================================================* * * * *---*
+/* verilator lint_off UNUSEDPARAM */
 
 // OPCODE I-TYPE
-localparam  OPCODE_JALR             = 7'b1100111;
-localparam  OPCODE_LW               = 7'b0000011;
+localparam  OPCODE_I_ARITH      = 7'b0010011;
+localparam  OPCODE_I_ADDI       = 7'b0010011,
+            OPCODE_I_SLTI       = 7'b0010011,
+            OPCODE_I_SLTIU      = 7'b0010011,
+            OPCODE_I_XORI       = 7'b0010011,
+            OPCODE_I_ORI        = 7'b0010011,
+            OPCODE_I_ANDI       = 7'b0010011;
 
-localparam  OPCODE_ARITH_I_TYPE     = 7'b0010011;
-localparam  OPCODE_ADDI             = 7'b0010011,
-            OPCODE_SLTI             = 7'b0010011,
-            OPCODE_SLTIU            = 7'b0010011,
-            OPCODE_XORI             = 7'b0010011,
-            OPCODE_ORI              = 7'b0010011,
-            OPCODE_ANDI             = 7'b0010011;
+localparam  OPCODE_I_JALR       = 7'b1100111;
+localparam  OPCODE_I_LW         = 7'b0000011;
 
 // OPCODE S-TYPE
-localparam  OPCODE_SW               = 7'b0100011;
+localparam  OPCODE_S_SW         = 7'b0100011;
 
 // OPCODE B-TYPE
-localparam  OPCODE_BRANCH_B_TYPE    = 7'b1100011;
-localparam  OPCODE_BEQ              = 7'b1100011,
-            OPCODE_BNE              = 7'b1100011,
-            OPCODE_BLT              = 7'b1100011,
-            OPCODE_BGE              = 7'b1100011,
-            OPCODE_BLTU             = 7'b1100011,
-            OPCODE_BGEU             = 7'b1100011;
+localparam  OPCODE_B_TYPE       = 7'b1100011;
+localparam  OPCODE_B_BEQ        = 7'b1100011,
+            OPCODE_B_BNE        = 7'b1100011,
+            OPCODE_B_BLT        = 7'b1100011,
+            OPCODE_B_BGE        = 7'b1100011,
+            OPCODE_B_BLTU       = 7'b1100011,
+            OPCODE_B_BGEU       = 7'b1100011;
 
 // OPCODE U-TYPE
-localparam  OPCODE_LUI              = 7'b0110111;
-localparam  OPCODE_AUIPC            = 7'b0010111;
+localparam  OPCODE_U_LUI        = 7'b0110111;
+localparam  OPCODE_U_AUIPC      = 7'b0010111;
 
 // OPCODE J-TYPE
-localparam  OPCODE_JAL              = 7'b1101111;
+localparam  OPCODE_J_JAL        = 7'b1101111;
+
+/* verilator lint_on UNUSEDPARAM */

@@ -32,14 +32,11 @@
 module imm_gen #(
      parameter      DATA_W   = 32
 ) (
-     input                  clk_i
-    ,input                  rst_ni
-
-    ,input     [DATA_W-1:0] instuction_i
+     input     [DATA_W-1:0] instruction_i
     ,output    [DATA_W-1:0] imm_ext_o
 );
 
-`include "lovanus_opcode.vh"
+`include "lovanus_opcode_params.vh"
 
 localparam OPCODE_W     = 7;
 
@@ -57,7 +54,7 @@ reg                 imm_J_match;
 // Instruction Type Match
 //-------------------------------------------------------------------------*-*-*
 
-assign opcode = instuction_i[0 +: OPCODE_W];
+assign opcode = instruction_i[0 +: OPCODE_W];
 
 always @(*) begin
     imm_I_match = 1'b0;
@@ -66,12 +63,13 @@ always @(*) begin
     imm_U_match = 1'b0;
     imm_J_match = 1'b0;
 
-    case (opcode)
-        OPCODE_JALR, OPCODE_LW, OPCODE_ARITH_I_TYPE : imm_I_match = 1'b1;
-        OPCODE_SW                                   : imm_S_match = 1'b1;
-        OPCODE_BRANCH_B_TYPE                        : imm_B_match = 1'b1;
-        OPCODE_LUI, OPCODE_AUIPC                    : imm_U_match = 1'b1;
-        OPCODE_JAL                                  : imm_J_match = 1'b1;
+    (* parallel_case *) case (opcode)
+        OPCODE_I_JALR, OPCODE_I_LW, OPCODE_I_ARITH  : imm_I_match = 1'b1;
+        OPCODE_S_SW                                 : imm_S_match = 1'b1;
+        OPCODE_B_TYPE                               : imm_B_match = 1'b1;
+        OPCODE_U_LUI, OPCODE_U_AUIPC                : imm_U_match = 1'b1;
+        OPCODE_J_JAL                                : imm_J_match = 1'b1;
+        default                                     : ;
     endcase
 end
 
@@ -79,17 +77,19 @@ end
 // Immediate Extension
 //-------------------------------------------------------------------------*-*-*
 
-assign sign_msb = instuction_i[31];
+assign sign_msb = instruction_i[31];
 
 always @(*) begin
-    imm_ext = 32'h0;
     (* parallel_case *) case (1'b1)
-        imm_I_match: imm_ext = {20{sign_msb[31]}, instuction_i[30:20]};
-        imm_S_match: imm_ext = {20{sign_msb[31]}, instuction_i[30:25], instuction_i[11:7]};
-        imm_B_match: imm_ext = {20{sign_msb[31]}, instuction_i[7], instuction_i[30:25], instuction_i[11:8], 1'b0};
-        imm_U_match: imm_ext = {instuction_i[31:12], 12'h0};
-        imm_J_match: imm_ext = {20{sign_msb[31]}, instuction_i[19:12], instuction_i[20], instuction_i[30:21], 1'b0};
+        imm_I_match : imm_ext = {{20{sign_msb}}, instruction_i[31:20]};
+        imm_S_match : imm_ext = {{20{sign_msb}}, instruction_i[31:25], instruction_i[11:7]};
+        imm_B_match : imm_ext = {{20{sign_msb}}, instruction_i[7], instruction_i[30:25], instruction_i[11:8], 1'b0};
+        imm_U_match : imm_ext = {instruction_i[31:12], 12'h0};
+        imm_J_match : imm_ext = {{12{sign_msb}}, instruction_i[19:12], instruction_i[20], instruction_i[30:21], 1'b0};
+        default     : imm_ext = 32'h0;
     endcase
 end
+
+assign imm_ext_o = imm_ext;
 
 endmodule
