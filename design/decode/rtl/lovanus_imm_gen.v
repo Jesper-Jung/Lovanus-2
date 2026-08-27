@@ -3,14 +3,14 @@
 //     +                       +                                 +    
 //    .         .         .        +          .          .         .         + .
 // .    *       * *.  *      * **    **    * *    *   . * .   . *  .       .       
-//      .      .    \  .    / .  \   . \   . .     \ *       +      *        . 
+//      .      .    \  .    / .  \   . \   . .     \ *       .      *        . 
 //  .   *     *      * *   *  * + *  *  *  * *      *  *    ---    *    .           .
-//       .     \    .   . /  .     \  .   \ . \     .     *      *         .      .
-// .     * -- *  * *     *   *      * *    **   *  *   *      +       *       .      .
+//       .     \    .   . /  .     \  .   \ . \     .     *      *        .      .
+// .     * -- *  * *     *   *      * *    **   *  *   *      .      *       .      .
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * Module Name   : u_imm_gen
+//  * Module Name   : u_lovanus_imm_gen
 //  * Author        : Jesper
 //  * Purpose       : Extend immediate from instruction
 //
@@ -29,7 +29,7 @@
 //
 //=================================================================* * * * *---*
 
-module imm_gen #(
+module lovanus_imm_gen #(
      parameter      DATA_W   = 32
 ) (
      input     [DATA_W-1:0] instruction_i
