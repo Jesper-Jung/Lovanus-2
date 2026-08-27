@@ -17,8 +17,8 @@
 //  * Note          :
 //      | See '2.3 Immediate encoding variant' of the RISC-V unpriviliged document.  
 //      | RV32I Base Inst set,
-//          R-TYPE      // SLLI, SRLI, SRAI, ADD, SUB, SLL, SLT, SLTU, XOR, SLR, SRA, OR, AND
-//          I-TYPE      // JALR, LW, ADDI, SLTI, SLTIU, XORI, ORI, ANDI
+//          R-TYPE      // ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
+//          I-TYPE      // JALR, LW, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI
 //          S-TYPE      // SW
 //          B-TYPE      // BEQ, BNE, BGE, BLTU, BGEU
 //          U-TYPE      // LUI, AUIPC
