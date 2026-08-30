@@ -18,9 +18,9 @@
 //      | See '2.3 Immediate encoding variant' of the RISC-V unpriviliged document.  
 //      | RV32I Base Inst set,
 //          R-TYPE      // ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
-//          I-TYPE      // JALR, LW, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI
-//          S-TYPE      // SW
-//          B-TYPE      // BEQ, BNE, BGE, BLTU, BGEU
+//          I-TYPE      // JALR, LB, LH, LW, LBU, LHU, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI
+//          S-TYPE      // SB, SH, SW
+//          B-TYPE      // BEQ, BNE, BLT, BGE, BLTU, BGEU
 //          U-TYPE      // LUI, AUIPC
 //          J-TYPE      // JAL
 //          etc         // FENCE, ECALL, EBREAK
@@ -64,12 +64,12 @@ always @(*) begin
     imm_J_match = 1'b0;
 
     (* parallel_case *) case (opcode)
-        OPCODE_I_JALR, OPCODE_I_LW, OPCODE_I_ARITH  : imm_I_match = 1'b1;
-        OPCODE_S_SW                                 : imm_S_match = 1'b1;
-        OPCODE_B_TYPE                               : imm_B_match = 1'b1;
-        OPCODE_U_LUI, OPCODE_U_AUIPC                : imm_U_match = 1'b1;
-        OPCODE_J_JAL                                : imm_J_match = 1'b1;
-        default                                     : ;
+        OPCODE_I_ARITH, OPCODE_I_LOAD, OPCODE_I_JALR    : imm_I_match = 1'b1;
+        OPCODE_S_TYPE                                   : imm_S_match = 1'b1;
+        OPCODE_B_TYPE                                   : imm_B_match = 1'b1;
+        OPCODE_U_LUI, OPCODE_U_AUIPC                    : imm_U_match = 1'b1;
+        OPCODE_J_JAL                                    : imm_J_match = 1'b1;
+        default                                         : ;
     endcase
 end
 
