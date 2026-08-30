@@ -27,16 +27,13 @@
 //=================================================================* * * * *---*
 
 module lovanus_alu_ctrl #(
-     parameter                  DATA_W      = 32
-     parameter                  ALU_CTRL_W  = 4
+     parameter                  XLEN        = 32
+    ,parameter                  ALU_CTRL_W  = 4
 ) (
-     input         [`XLEN-1:0]  op_a_i
-    ,input         [`XLEN-1:0]  op_b_i
+     input          [XLEN-1:0]  instruction_i
+    ,input               [1:0]  ctrl_ALUOp_i
 
-    ,input    [ALU_CTRL_W-1:0]  alu_ctrl_i
-
-    ,output        [`XLEN-1:0]  alu_res_o
-    ,output                     alu_zero_o
+    ,output   [ALU_CTRL_W-1:0]  alu_ctrl_o
 );
 
 //==============================================================================

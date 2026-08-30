@@ -29,26 +29,25 @@
 `include "lovanus_def.vh"
 
 module lovanus_alu_top #(
-     parameter              DATA_W = 32
+     parameter              XLEN    = 32
 ) (
-    ,input     [`XLEN-1:0]  instruction_i
+    ,input      [XLEN-1:0]  instruction_i           // ? Wondered to be shorten into instr_5
 
     ,input                  ctrl_AUIPC_i
     ,input           [1:0]  ctrl_ALUOp_i
     ,input                  ctrl_ALUSrc_i
 
-    ,input     [`XLEN-1:0]  decode_rs1_i
-    ,input     [`XLEN-1:0]  pc_i
+    ,input      [XLEN-1:0]  decode_rs1_i
+    ,input      [XLEN-1:0]  pc_i
 
-    ,input     [`XLEN-1:0]  decode_rs2_i
-    ,input     [`XLEN-1:0]  imm_ext_i
+    ,input      [XLEN-1:0]  decode_rs2_i
+    ,input      [XLEN-1:0]  imm_ext_i
 
-    ,output    [`XLEN-1:0]  alu_res_o
+    ,output     [XLEN-1:0]  alu_res_o
     ,output                 alu_zero_o
 );
 
 `include "lovanus_alu_ctrl.vh"
-localparam XLEN = 32;
 
 wire [ALU_CTRL_W-1:0] alu_ctrl;
 
