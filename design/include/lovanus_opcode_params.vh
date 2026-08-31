@@ -50,7 +50,9 @@ localparam  OPCODE_I_ADDI       = 7'b0010011,
             OPCODE_I_SLTIU      = 7'b0010011,
             OPCODE_I_XORI       = 7'b0010011,
             OPCODE_I_ORI        = 7'b0010011,
-            OPCODE_I_ANDI       = 7'b0010011,
+            OPCODE_I_ANDI       = 7'b0010011;
+
+localparam  OPCODE_I_SHIFT      = 7'b0010011;
             OPCODE_I_SLLI       = 7'b0010011,
             OPCODE_I_SRLI       = 7'b0010011,
             OPCODE_I_SRAI       = 7'b0010011;

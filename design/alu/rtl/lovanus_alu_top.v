@@ -31,7 +31,7 @@
 module lovanus_alu_top #(
      parameter              XLEN    = 32
 ) (
-    ,input      [XLEN-1:0]  instruction_i           // ? Wondered to be shorten into instr_5
+    ,input      [XLEN-1:0]  instruction_i
 
     ,input                  ctrl_AUIPC_i
     ,input           [1:0]  ctrl_ALUOp_i
