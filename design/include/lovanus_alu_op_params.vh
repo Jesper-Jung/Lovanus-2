@@ -10,7 +10,7 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * File Name     : lovanus_alu_op.vh
+//  * File Name     : lovanus_alu_op_params.vh
 //  * Author        : Jesper
 //  * Purpose       :
 //
