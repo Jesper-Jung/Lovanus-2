@@ -26,20 +26,18 @@ module lovanus_ctrl_unit #(
      parameter      XLEN        = 32
     ,parameter      ALUOP_W     = 4
 ) (
-     input                  instruction_i
+     input                  instr_i
 
-    ,output                 ctrl_Branch_o
-    ,output                 ctrl_MemRead_o
-    ,output                 ctrl_MemtoReg_o
-    ,output  [ALUOP_W-1:0]  ctrl_ALUOp_o
-    ,output                 ctrl_MemWrite_o
-    ,output                 ctrl_ALUSrc_o
-    ,output                 ctrl_RegWrite_o
-
-    ,output                 ctrl_AUIPC_o
-    ,output                 ctrl_JAL_o
-    ,output                 ctrl_JALr_o
-    ,output                 ctrl_LUI_o
+    ,output  [ALUOP_W-1:0]  ctrl_ALUOp_o        // Select ALU operation
+    ,output                 ctrl_ALUSrc1_o      // Mux rs1 and pc 
+    ,output                 ctrl_ALUSrc2_o      // Mux rs2 and imm_ext
+    ,output                 ctrl_MemRead_o      // Validate to read from the Data Memory
+    ,output                 ctrl_MemWrite_o     // Validate to write rs2 on the Data Memory
+    ,output                 ctrl_MemtoReg_o     // Select rdata from the Data Memory to write back
+    ,output                 ctrl_LinktoReg_o    // Select pc+4 to write back
+    ,output                 ctrl_Branch_o       // Notify to decide to branch or not currently
+    ,output                 ctrl_JumpPC_o       // Validate to jump PC
+    ,output                 ctrl_RegWrite_o     // Validate to write back on the regfile
 );
 
 `include    "lovanus_alu_op_params.vh"
@@ -49,25 +47,24 @@ wire          [6:0] opcode;
 wire          [6:0] funct7;
 wire          [2:0] funct3;
 
-reg                 Branch;     // PC
-reg                 RegWrite;   // Dec
-reg   [ALUOP_W-1:0] ALUOp;      // Exe, Control signals for ALU controller
-reg                 ALUSrc;     // Exe
-reg                 MemRead;    // Mem
-reg                 MemWrite;   // Mem
-reg                 MemtoReg;   // Mem
-reg                 AUIPC;      // Inst
-reg                 JAL;        // Inst
-reg                 JALr;       // Inst
-reg                 LUI;        // Inst
+reg   [ALUOP_W-1:0] ALUOp;
+reg                 ALUSrc1;
+reg                 ALUSrc2;
+reg                 MemRead;
+reg                 MemWrite;
+reg                 MemtoReg;
+reg                 LinktoReg;
+reg                 Branch;
+reg                 JumpPC;
+reg                 RegWrite;
 
 //==============================================================================
 // Wire Assigning
 //-------------------------------------------------------------------------*-*-*
 
-assign opcode = instruction_i[ 6: 0];
-assign funct7 = instruction_i[31:25];
-assign funct3 = instruction_i[14:12];
+assign opcode = instr_i[ 6: 0];
+assign funct7 = instr_i[31:25];
+assign funct3 = instr_i[14:12];
 
 //==============================================================================
 // Decoder Stage
@@ -80,6 +77,7 @@ assign funct3 = instruction_i[14:12];
 //-------------------------------------------------------------------------*-*-*
 // ALUOp, ALUSrc
 //-------------------------------------------------------------------------*-*-*
+
 /*
     ALUOp ----
 */

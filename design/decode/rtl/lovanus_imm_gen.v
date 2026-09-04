@@ -30,10 +30,10 @@
 //=================================================================* * * * *---*
 
 module lovanus_imm_gen #(
-     parameter      DATA_W   = 32
+     parameter              XLEN   = 32
 ) (
-     input     [DATA_W-1:0] instruction_i
-    ,output    [DATA_W-1:0] imm_ext_o
+     input       [XLEN-1:0] instr_i
+    ,output      [XLEN-1:0] imm_ext_o
 );
 
 `include "lovanus_opcode_params.vh"
@@ -43,7 +43,7 @@ localparam OPCODE_W     = 7;
 wire [OPCODE_W-1:0] opcode;
 wire                sign_msb;
 
-reg    [DATA_W-1:0] imm_ext;
+reg      [XLEN-1:0] imm_ext;
 reg                 imm_I_match;
 reg                 imm_S_match;
 reg                 imm_B_match;
@@ -54,7 +54,7 @@ reg                 imm_J_match;
 // Instruction Type Match
 //-------------------------------------------------------------------------*-*-*
 
-assign opcode = instruction_i[0 +: OPCODE_W];
+assign opcode = instr_i[0 +: OPCODE_W];
 
 always @(*) begin
     imm_I_match = 1'b0;
@@ -77,15 +77,15 @@ end
 // Immediate Extension
 //-------------------------------------------------------------------------*-*-*
 
-assign sign_msb = instruction_i[31];
+assign sign_msb = instr_i[31];
 
 always @(*) begin
     (* parallel_case *) case (1'b1)
-        imm_I_match : imm_ext = {{20{sign_msb}}, instruction_i[31:20]};
-        imm_S_match : imm_ext = {{20{sign_msb}}, instruction_i[31:25], instruction_i[11:7]};
-        imm_B_match : imm_ext = {{20{sign_msb}}, instruction_i[7], instruction_i[30:25], instruction_i[11:8], 1'b0};
-        imm_U_match : imm_ext = {instruction_i[31:12], 12'h0};
-        imm_J_match : imm_ext = {{12{sign_msb}}, instruction_i[19:12], instruction_i[20], instruction_i[30:21], 1'b0};
+        imm_I_match : imm_ext = {{20{sign_msb}}, instr_i[31:20]};
+        imm_S_match : imm_ext = {{20{sign_msb}}, instr_i[31:25], instr_i[11:7]};
+        imm_B_match : imm_ext = {{20{sign_msb}}, instr_i[7], instr_i[30:25], instr_i[11:8], 1'b0};
+        imm_U_match : imm_ext = {instr_i[31:12], 12'h0};
+        imm_J_match : imm_ext = {{12{sign_msb}}, instr_i[19:12], instr_i[20], instr_i[30:21], 1'b0};
         default     : imm_ext = 32'h0;
     endcase
 end
