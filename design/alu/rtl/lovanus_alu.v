@@ -10,9 +10,9 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * Module Name   : u_lovanus_alu_top
+//  * Module Name   : u_lovanus_alu
 //  * Author        : Jesper
-//  * Purpose       : Calculate with ~~~.
+//  * Purpose       : Calculate .
 //
 //  * Note          :
 //      | RV32I Base Inst set,
@@ -28,7 +28,7 @@
 
 `include "lovanus_def.vh"
 
-module lovanus_alu_top #(
+module lovanus_alu #(
      parameter              XLEN    = 32
 ) (
     ,input      [XLEN-1:0]  instruction_i
@@ -72,7 +72,7 @@ lovanus_alu_ctrl u_lovanus_alu_ctrl (
 assign op_a_muxed = (ctrl_AUIPC_i   ) ? pc_i        : decode_rs1_i;
 assign op_b_muxed = (ctrl_AUISrc_i  ) ? imm_ext_i   : decode_rs2_i;
 
-lovanus_alu_unit u_lovanus_alu_unit (
+lovanus_alu_core u_lovanus_alu_core (
      .op_a_i                ( op_a_muxed    )
     ,.op_b_i                ( op_b_muxed    )
 

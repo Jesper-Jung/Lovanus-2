@@ -10,7 +10,7 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * Module Name   : u_lovanus_alu_unit
+//  * Module Name   : u_lovanus_alu_core
 //  * Author        : Jesper
 //  * Purpose       : Calculate with ~~~.
 //
@@ -24,12 +24,9 @@
 //          J-TYPE      // JAL
 //          etc         // FENCE, ECALL, EBREAK
 //
-//  * Reference     :
-//      1. [Hazard3] hazard3_regfile_1w2r.v
-//
 //=================================================================* * * * *---*
 
-module lovanus_alu_unit #(
+module lovanus_alu_core #(
      parameter                  XLEN        = 32
 
     ,parameter                  ALU_CTRL_W  = 4
