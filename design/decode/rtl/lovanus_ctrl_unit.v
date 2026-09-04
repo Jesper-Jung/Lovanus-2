@@ -35,8 +35,8 @@ module lovanus_ctrl_unit #(
     ,output                 ctrl_MemWrite_o     // Validate to write rs2 on the Data Memory
     ,output                 ctrl_MemtoReg_o     // Select rdata from the Data Memory to write back
     ,output                 ctrl_LinktoReg_o    // Select pc+4 to write back
-    ,output                 ctrl_Branch_o       // Notify to decide to branch or not currently
-    ,output                 ctrl_JumpPC_o       // Validate to jump PC
+    ,output                 ctrl_JumpB_o        // Validate to branch conditional jump PC
+    ,output                 ctrl_JumpJ_o        // Validate to jump PC
     ,output                 ctrl_RegWrite_o     // Validate to write back on the regfile
 );
 

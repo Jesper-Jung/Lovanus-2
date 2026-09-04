@@ -26,12 +26,6 @@ module lovanus_decoder #(
     ,parameter              ALUOP_W     = 4
 ) (
     //--------------------------------------
-    // ## Global Port ##
-
-     input                  clk_i
-    ,input                  rst_ni
-
-    //--------------------------------------
     // ## Decoder Main ##
 
     ,input       [XLEN-1:0] instr_i
@@ -48,8 +42,8 @@ module lovanus_decoder #(
     ,output                 ctrl_MemWrite_o
     ,output                 ctrl_MemtoReg_o
     ,output                 ctrl_LinktoReg_o
-    ,output                 ctrl_Branch_o
-    ,output                 ctrl_JumpPC_o
+    ,output                 ctrl_JumpB_o
+    ,output                 ctrl_JumpJ_o
     ,output                 ctrl_RegWrite_o
 
     //--------------------------------------
@@ -104,8 +98,8 @@ lovanus_ctrl_unit #(
     ,.ctrl_MemWrite_o   ( ctrl_MemWrite_o   )
     ,.ctrl_MemtoReg_o   ( ctrl_MemtoReg_o   )
     ,.ctrl_LinktoReg_o  ( ctrl_LinktoReg_o  )
-    ,.ctrl_Branch_o     ( ctrl_Branch_o     )
-    ,.ctrl_JumpPC_o     ( ctrl_JumpPC_o     )
+    ,.ctrl_JumpB_o      ( ctrl_JumpB_o      )
+    ,.ctrl_JumpJ_o      ( ctrl_JumpJ_o      )
     ,.ctrl_RegWrite_o   ( ctrl_RegWrite_o   )
 );
 
