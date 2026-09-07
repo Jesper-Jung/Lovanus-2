@@ -31,20 +31,20 @@
 module lovanus_alu #(
      parameter              XLEN    = 32
 ) (
-    ,input      [XLEN-1:0]  instruction_i
+    ,input      [XLEN-1:0]  instr_i
 
-    ,input                  ctrl_AUIPC_i
     ,input           [1:0]  ctrl_ALUOp_i
-    ,input                  ctrl_ALUSrc_i
+    ,input                  ctrl_ALUSrc1_i
+    ,input                  ctrl_ALUSrc2_i
 
-    ,input      [XLEN-1:0]  decode_rs1_i
+    ,input      [XLEN-1:0]  dec_rdata1_i
     ,input      [XLEN-1:0]  pc_i
 
-    ,input      [XLEN-1:0]  decode_rs2_i
+    ,input      [XLEN-1:0]  dec_rdata2_i
     ,input      [XLEN-1:0]  imm_ext_i
 
-    ,output     [XLEN-1:0]  alu_res_o
-    ,output                 alu_zero_o
+    ,output     [XLEN-1:0]  result_o
+    ,output                 branch_hit_o
 );
 
 `include "lovanus_alu_ctrl.vh"
@@ -59,7 +59,7 @@ wire [XLEN-1:0] op_b_muxed;
 //-------------------------------------------------------------------------*-*-*
 
 lovanus_alu_ctrl u_lovanus_alu_ctrl (
-     .instruction_i         ( instruction_i )
+     .instr_i               ( instr_i       )
     ,.ctrl_ALUOp_i          ( ctrl_ALUOp_i  )
 
     ,.alu_ctrl_o            ( alu_ctrl      )
@@ -69,8 +69,8 @@ lovanus_alu_ctrl u_lovanus_alu_ctrl (
 // ALU calculation unit
 //-------------------------------------------------------------------------*-*-*
 
-assign op_a_muxed = (ctrl_AUIPC_i   ) ? pc_i        : decode_rs1_i;
-assign op_b_muxed = (ctrl_AUISrc_i  ) ? imm_ext_i   : decode_rs2_i;
+assign op_a_muxed = (ctrl_AUISrc1_i ) ? pc_i        : dec_rdata1_i;
+assign op_b_muxed = (ctrl_AUISrc2_i ) ? imm_ext_i   : dec_rdata2_i;
 
 lovanus_alu_core u_lovanus_alu_core (
      .op_a_i                ( op_a_muxed    )
@@ -78,8 +78,8 @@ lovanus_alu_core u_lovanus_alu_core (
 
     ,.alu_ctrl_i            ( alu_ctrl      )
 
-    ,.alu_res_o             ( alu_res_o     )
-    ,.alu_zero_o            ( alu_zero_o    )
+    ,.alu_res_o             ( result_o      )
+    ,.alu_zero_o            ( branch_hit_o  )
 );
 
 endmodule
