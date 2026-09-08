@@ -30,17 +30,15 @@
 //=================================================================* * * * *---*
 
 module lovanus_imm_gen #(
-     parameter              XLEN   = 32
+     parameter              XLEN        = 32
+    ,parameter              OPCODE_W    = 7
 ) (
-     input       [XLEN-1:0] instr_i
+     input       [XLEN-1:0] opcode_i
     ,output      [XLEN-1:0] imm_ext_o
 );
 
 `include "lovanus_opcode_params.vh"
 
-localparam OPCODE_W     = 7;
-
-wire [OPCODE_W-1:0] opcode;
 wire                sign_msb;
 
 reg      [XLEN-1:0] imm_ext;
@@ -54,8 +52,6 @@ reg                 imm_J_match;
 // Instruction Type Match
 //-------------------------------------------------------------------------*-*-*
 
-assign opcode = instr_i[0 +: OPCODE_W];
-
 always @(*) begin
     imm_I_match = 1'b0;
     imm_S_match = 1'b0;
@@ -63,7 +59,7 @@ always @(*) begin
     imm_U_match = 1'b0;
     imm_J_match = 1'b0;
 
-    (* parallel_case *) case (opcode)
+    (* parallel_case *) case (opcode_i)
         OPCODE_I_ARITH, OPCODE_I_LOAD, OPCODE_I_JALR    : imm_I_match = 1'b1;
         OPCODE_S_TYPE                                   : imm_S_match = 1'b1;
         OPCODE_B_TYPE                                   : imm_B_match = 1'b1;

@@ -23,7 +23,11 @@
 
 module lovanus_decoder #(
      parameter              XLEN        = 32
-    ,parameter              ALUOP_W     = 4
+
+    ,parameter              ALUOP_W     = 2
+    ,parameter              OPCODE_W    = 7
+    ,parameter              FUNCT7_W    = 7
+    ,parameter              FUNCT3_W    = 3
 ) (
     //--------------------------------------
     // ## Decoder Main ##
@@ -57,6 +61,10 @@ module lovanus_decoder #(
     ,input       [XLEN-1:0] rdata2_i
 );
 
+wire [OPCODE_W-1:0] opcode;
+wire [FUNCT7_W-1:0] funct7;
+wire [FUNCT3_W-1:0] funct3;
+
 //==============================================================================
 // Register File Interface
 //-------------------------------------------------------------------------*-*-*
@@ -68,15 +76,18 @@ assign rs2_o        = instr_i[24:20];
 assign rdata1_o     = rdata1_i;
 assign rdata2_o     = rdata2_i;
 
+assign opcode       = instr_i[0 +: OPCODE_W];
+assign funct7       = instr_i[0 +: FUNCT7_W];
+assign funct3       = instr_i[0 +: FUNCT3_W];
+
 //==============================================================================
 // Imm Gen
 //-------------------------------------------------------------------------*-*-*
 
 lovanus_imm_gen #(
      .XLEN              ( XLEN              )
-    ,.ALUOP_W           ( ALUOP_W           )
 ) u_lovanus_imm_gen (
-     .instr_i           ( instr_i           )
+     .opcode_i          ( opcode            )
 
     ,.imm_ext_o         ( imm_ext_o         )
 );
@@ -87,9 +98,10 @@ lovanus_imm_gen #(
 
 lovanus_ctrl_unit #(
      .XLEN              ( XLEN              )
-    ,.ALUOP_W           ( ALUOP_W           )
 ) u_lovanus_ctrl_unit (
-     .instr_i           ( instr_i           )
+     .opcode_i          ( opcode            )
+    ,.funct7_i          ( funct7            )
+    ,.funct3_i          ( funct3            )
 
     ,.ctrl_ALUOp_o      ( ctrl_ALUOp_o      )
     ,.ctrl_ALUSrc1_o    ( ctrl_ALUSrc1_o    )

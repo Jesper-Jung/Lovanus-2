@@ -23,12 +23,18 @@
 //=================================================================* * * * *---*
 
 module lovanus_ctrl_unit #(
-     parameter      XLEN        = 32
-    ,parameter      ALUOP_W     = 4
-) (
-     input                  instr_i
+     parameter              XLEN        = 32
 
-    ,output  [ALUOP_W-1:0]  ctrl_ALUOp_o        // Select ALU operation
+    ,parameter              ALUOP_W     = 2
+    ,parameter              OPCODE_W    = 7
+    ,parameter              FUNCT7_W    = 7
+    ,parameter              FUNCT3_W    = 3
+) (
+     input   [OPCODE_W-1:0] opcode_i;
+    ,input   [FUNCT7_W-1:0] funct7_i;
+    ,input   [FUNCT3_W-1:0] funct3_i;
+
+    ,output   [ALUOP_W-1:0] ctrl_ALUOp_o        // Select ALU operation
     ,output                 ctrl_ALUSrc1_o      // Mux rs1 and pc 
     ,output                 ctrl_ALUSrc2_o      // Mux rs2 and imm_ext
     ,output                 ctrl_MemRead_o      // Validate to read from the Data Memory
@@ -42,10 +48,6 @@ module lovanus_ctrl_unit #(
 
 `include    "lovanus_alu_op_params.vh"
 `include    "lovanus_funct_params.vh"
-
-wire          [6:0] opcode;
-wire          [6:0] funct7;
-wire          [2:0] funct3;
 
 reg   [ALUOP_W-1:0] ALUOp;
 reg                 ALUSrc1;
