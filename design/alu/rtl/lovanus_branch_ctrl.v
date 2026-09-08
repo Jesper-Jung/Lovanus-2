@@ -49,12 +49,12 @@ always @(*) begin
     branch_hit = 1'b0;
     if (alu_op_i == ALUOP_BRANCH) begin
         case (funct3_i)
-            F3_BEQ      : branch_hit = (op_a_i      == op_b_i   );
-            F3_BNE      : branch_hit = (op_a_i      != op_b_i   );
-            F3_BLT      : branch_hit = (op_a_sgn    <  op_b_sgn );
-            F3_BGE      : branch_hit = (op_a_sgn    >= op_b_sgn );
-            F3_BLTU     : branch_hit = (op_a_i      <  op_b_i   );
-            F3_BGEU     : branch_hit = (op_a_i      >= op_b_i   );
+            F3_BEQ      : branch_hit = (op_a_i   == op_b_i   );
+            F3_BNE      : branch_hit = (op_a_i   != op_b_i   );
+            F3_BLT      : branch_hit = (op_a_sgn <  op_b_sgn );
+            F3_BGE      : branch_hit = (op_a_sgn >= op_b_sgn );
+            F3_BLTU     : branch_hit = (op_a_i   <  op_b_i   );
+            F3_BGEU     : branch_hit = (op_a_i   >= op_b_i   );
         endcase
     end
 end

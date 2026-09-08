@@ -90,8 +90,17 @@ lovanus_alu_core u_lovanus_alu_core (
 
     ,.alu_ctrl_i            ( alu_ctrl      )
 
-    ,.alu_res_o             ( result_o      )
-    ,.alu_zero_o            ( branch_hit_o  )
+    ,.result_o              ( result_o      )
+);
+
+lovanus_branch_ctrl u_lovanus_branch_ctrl (
+     .op_a_i                ( op_a_muxed    )
+    ,.op_b_i                ( op_b_muxed    )
+
+    ,.alu_ctrl_i            ( alu_ctrl      )
+    ,.funct3_i              ( funct3        )
+
+    ,.branch_hit_o          ( branch_hit_o  )
 );
 
 endmodule

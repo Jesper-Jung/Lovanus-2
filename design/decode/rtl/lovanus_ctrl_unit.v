@@ -46,7 +46,7 @@ module lovanus_ctrl_unit #(
     ,output                 ctrl_RegWrite_o     // Validate to write back on the regfile
 );
 
-`include    "lovanus_alu_op_params.vh"
+`include    "lovanus_alu_params.vh"
 `include    "lovanus_funct_params.vh"
 
 reg   [ALUOP_W-1:0] ALUOp;

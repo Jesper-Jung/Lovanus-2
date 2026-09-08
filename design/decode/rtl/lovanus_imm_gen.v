@@ -31,6 +31,7 @@
 
 module lovanus_imm_gen #(
      parameter              XLEN        = 32
+     
     ,parameter              OPCODE_W    = 7
 ) (
      input       [XLEN-1:0] opcode_i
