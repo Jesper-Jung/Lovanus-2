@@ -22,9 +22,10 @@
 //=================================================================* * * * *---*
 
 module lovanus_branch_ctrl #(
-     parameter                  XLEN = 32
+     parameter                  XLEN        = 32
 
-    ,parameter                  ALU_OP_W = 2
+    ,parameter                  ALU_OP_W    = 2
+    ,parameter                  FUNCT3_W    = 3
 ) (
      input           [XLEN-1:0] op_a_i
     ,input           [XLEN-1:0] op_b_i

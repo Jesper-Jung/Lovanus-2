@@ -12,8 +12,7 @@
 //
 //  * Module Name   : u_lovanus_decoder
 //  * Author        : Jesper
-//  * Purpose       : Read operands from the register file and
-//  *                 generate control signals to execute the instruction.
+//  * Purpose       : Read operands and generate control signals following the instruction.
 //
 //  * Note          :
 //      |   The RISC-V Register file is placed outside of this module
