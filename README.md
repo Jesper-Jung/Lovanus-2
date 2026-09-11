@@ -6,12 +6,6 @@ for everywhere, everytime, all at once.
 
 # ⚙️ Objection
 
-별빛을 한 가닥씩 가지런히 가져와
-
-저 밤하늘을 보며 한 올, 한 올,
-
-수많은 별자리를 수놓을 수 있다면
-
 Lovanus-2 targets to open-source MCU core on the FPGA to support audio sample calculation
 including various audio FX.
 
