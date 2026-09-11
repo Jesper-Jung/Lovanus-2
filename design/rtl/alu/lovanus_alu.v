@@ -41,8 +41,9 @@ module lovanus_alu #(
     ,input       [XLEN-1:0] instr_i
 
     ,input    [ALUOP_W-1:0] ctrl_ALUOp_i
-    ,input                  ctrl_ALUSrc1_i
-    ,input                  ctrl_ALUSrc2_i
+    ,input                  ctrl_ALUSrcPC_i
+    ,input                  ctrl_ALUSrcImm_i
+    ,input                  ctrl_Branch_i
 
     ,input       [XLEN-1:0] dec_rdata1_i
     ,input       [XLEN-1:0] pc_i
@@ -51,7 +52,7 @@ module lovanus_alu #(
     ,input       [XLEN-1:0] imm_ext_i
 
     ,output      [XLEN-1:0] result_o
-    ,output                 branch_hit_o
+    ,output                 branch_taken_o
 );
 
 `include "lovanus_alu_ctrl.vh"
@@ -78,11 +79,11 @@ lovanus_alu_ctrl u_lovanus_alu_ctrl (
 );
 
 //==============================================================================
-// ALU calculation unit
+// ALU Core & Branch Comparator
 //-------------------------------------------------------------------------*-*-*
 
-assign op_a_muxed = ( ctrl_ALUSrc1_i    ) ? pc_i        : dec_rdata1_i;
-assign op_b_muxed = ( ctrl_ALUSrc2_i    ) ? imm_ext_i   : dec_rdata2_i;
+assign op_a_muxed = ( ctrl_ALUSrcPC_i   ) ? pc_i        : dec_rdata1_i;
+assign op_b_muxed = ( ctrl_ALUSrcImm_i  ) ? imm_ext_i   : dec_rdata2_i;
 
 lovanus_alu_core u_lovanus_alu_core (
      .op_a_i                ( op_a_muxed    )
@@ -93,14 +94,15 @@ lovanus_alu_core u_lovanus_alu_core (
     ,.result_o              ( result_o      )
 );
 
-lovanus_branch_ctrl u_lovanus_branch_ctrl (
-     .op_a_i                ( op_a_muxed    )
-    ,.op_b_i                ( op_b_muxed    )
+lovanus_branch_comp u_lovanus_branch_comp (
+     .dec_rdata1_i          ( dec_rdata1_i  )
+    ,.dec_rdata2_i          ( dec_rdata2_i  )
 
-    ,.alu_ctrl_i            ( alu_ctrl      )
+    ,.ctrl_Branch_i         ( ctrl_Branch_i )
+
     ,.funct3_i              ( funct3        )
 
-    ,.branch_hit_o          ( branch_hit_o  )
+    ,.branch_taken_o        ( branch_taken_o)
 );
 
 endmodule

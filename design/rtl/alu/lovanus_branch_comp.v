@@ -10,56 +10,55 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * Module Name   : u_lovanus_branch_ctrl
+//  * Module Name   : u_lovanus_branch_comp
 //  * Author        : Jesper
-//  * Purpose       :
+//  * Purpose       : Decide if the current branch is taken or not
 //
-//  * Note          :
-//      |   See '2.3 Immediate encoding variant' of the RISC-V unpriviliged document.  
-//
-//  * Reference     :
+//  * Note
+//      |   This comparator is independent module of the ALU core.
+//          The ALU core calculates branch address as pc + offset.
 //
 //=================================================================* * * * *---*
 
-module lovanus_branch_ctrl #(
+module lovanus_branch_comp #(
      parameter                  XLEN        = 32
 
     ,parameter                  ALU_OP_W    = 2
     ,parameter                  FUNCT3_W    = 3
 ) (
-     input           [XLEN-1:0] op_a_i
-    ,input           [XLEN-1:0] op_b_i
+     input           [XLEN-1:0] dec_rdata1_i
+    ,input           [XLEN-1:0] dec_rdata2_i
 
-    ,input       [ALU_OP_W-1:0] alu_op_i
+    ,input       [ALU_OP_W-1:0] ctrl_Branch_i
     ,input       [FUNCT3_W-1:0] funct3_i
 
-    ,output                     branch_hit_o
+    ,output                     branch_taken_o
 );
 
 `include "lovanus_funct_params.vh"
 
-wire signed [XLEN-1:0] op_a_sgn;
-wire signed [XLEN-1:0] op_b_sgn;
+wire signed [XLEN-1:0] rdata1_sgn;
+wire signed [XLEN-1:0] rdata2_sgn;
 
-reg branch_hit;
+reg branch_taken;
 
-assign op_a_sgn = op_a_i;
-assign op_b_sgn = op_b_i;
+assign rdata1_sgn = dec_rdata1_i;
+assign rdata2_sgn = dec_rdata2_i;
 
 always @(*) begin
-    branch_hit = 1'b0;
-    if (alu_op_i == ALUOP_BRANCH) begin
+    branch_taken = 1'b0;
+    if (ctrl_Branch_i) begin
         case (funct3_i)
-            F3_BEQ      : branch_hit = (op_a_i   == op_b_i   );
-            F3_BNE      : branch_hit = (op_a_i   != op_b_i   );
-            F3_BLT      : branch_hit = (op_a_sgn <  op_b_sgn );
-            F3_BGE      : branch_hit = (op_a_sgn >= op_b_sgn );
-            F3_BLTU     : branch_hit = (op_a_i   <  op_b_i   );
-            F3_BGEU     : branch_hit = (op_a_i   >= op_b_i   );
+            F3_BEQ      : branch_taken = (dec_rdata1_i == dec_rdata2_i );
+            F3_BNE      : branch_taken = (dec_rdata1_i != dec_rdata2_i );
+            F3_BLT      : branch_taken = (rdata1_sgn   <  rdata2_sgn   );
+            F3_BGE      : branch_taken = (rdata1_sgn   >= rdata2_sgn   );
+            F3_BLTU     : branch_taken = (dec_rdata1_i <  dec_rdata2_i );
+            F3_BGEU     : branch_taken = (dec_rdata1_i >= dec_rdata2_i );
         endcase
     end
 end
 
-assign branch_hit_o = branch_hit;
+assign branch_taken_o = branch_taken;
 
 endmodule
