@@ -12,14 +12,33 @@
 //
 //  * Module Name   : u_lovanus_ctrl_unit
 //  * Author        : Jesper
-//  * Purpose       :
+//  * Purpose       : Generate control signal following instruction
 //
 //  * Note          :
-//      | See '2.3 Immediate encoding variant' of the RISC-V unpriviliged document.  
+//      | Each control signals generates depending on the opcode.
+//      | Control Signal Look-up Table ----
 //
-//  * Reference     :
-//      | 1. doc/RISC-V_RV32I_inst_set.png
-//
+//      INST        ALUOp       ALUSrcPC ALUSrcImm      Branch  Jump
+//      R-ARITH     arith       0       0               0       0
+//      I-ARITH     arith       0       1               0       0
+//      I-LOAD      default     0       1               0       0
+//      I-JALR      default     0       1               0       1
+//      S-STORE     default     0       1               0       0
+//      B-BRANCH    branch      1       1               1       0
+//      J-JAL       default     1       1               0       1
+//      U-LUI       default     0       1               0       0
+//      U-AUIPC     default     1       1               0       0
+//      
+//      INST        MemRead MemWrite    RegWrite    MemtoReg LinktoReg
+//      R-ARITH     0       0           1           0        0
+//      I-ARITH     0       0           1           0        0
+//      I-LOAD      1       0           1           1        0
+//      I-JALR      0       0           1           0        1
+//      S-STORE     0       1           0           0        0
+//      B-BRANCH    0       0           0           0        0
+//      J-JAL       0       0           1           0        1
+//      U-LUI       0       0           1           0        0
+//      U-AUIPC     0       0           1           0        0
 //=================================================================* * * * *---*
 
 module lovanus_ctrl_unit #(
@@ -27,129 +46,114 @@ module lovanus_ctrl_unit #(
 
     ,parameter              ALUOP_W     = 2
     ,parameter              OPCODE_W    = 7
-    ,parameter              FUNCT7_W    = 7
-    ,parameter              FUNCT3_W    = 3
 ) (
      input   [OPCODE_W-1:0] opcode_i;
-    ,input   [FUNCT7_W-1:0] funct7_i;
-    ,input   [FUNCT3_W-1:0] funct3_i;
 
     ,output   [ALUOP_W-1:0] ctrl_ALUOp_o        // Select ALU operation
-    ,output                 ctrl_ALUSrc1_o      // Mux rs1 and pc 
-    ,output                 ctrl_ALUSrc2_o      // Mux rs2 and imm_ext
+    ,output                 ctrl_ALUSrcPC_o     // Mux rs1 and pc 
+    ,output                 ctrl_ALUSrcImm_o    // Mux rs2 and imm_ext
     ,output                 ctrl_MemRead_o      // Validate to read from the Data Memory
     ,output                 ctrl_MemWrite_o     // Validate to write rs2 on the Data Memory
     ,output                 ctrl_MemtoReg_o     // Select rdata from the Data Memory to write back
     ,output                 ctrl_LinktoReg_o    // Select pc+4 to write back
-    ,output                 ctrl_JumpB_o        // Validate to branch conditional jump PC
-    ,output                 ctrl_JumpJ_o        // Validate to jump PC
+    ,output                 ctrl_Branch_o       // Validate to branch conditional jump PC
+    ,output                 ctrl_Jump_o         // Validate to jump PC
     ,output                 ctrl_RegWrite_o     // Validate to write back on the regfile
 );
 
 `include    "lovanus_alu_params.vh"
-`include    "lovanus_funct_params.vh"
 
 reg   [ALUOP_W-1:0] ALUOp;
-reg                 ALUSrc1;
-reg                 ALUSrc2;
+reg                 ALUSrcPC;
+reg                 ALUSrcImm;
 reg                 MemRead;
 reg                 MemWrite;
 reg                 MemtoReg;
 reg                 LinktoReg;
 reg                 Branch;
-reg                 JumpPC;
+reg                 Jump;
 reg                 RegWrite;
 
-//==============================================================================
-// Wire Assigning
-//-------------------------------------------------------------------------*-*-*
+always @(*) begin
+    ALUOp       = ALUOP_DEFAULT;
+    ALUSrcPC    = 1'b0;
+    ALUSrcImm   = 1'b0;
+    Branch      = 1'b0;
+    Jump        = 1'b0;
+    MemRead     = 1'b0;
+    MemWrite    = 1'b0;
+    RegWrite    = 1'b0;
+    MemtoReg    = 1'b0;
+    LinktoReg   = 1'b0;
 
-assign opcode = instr_i[ 6: 0];
-assign funct7 = instr_i[31:25];
-assign funct3 = instr_i[14:12];
+    case (opcode_i)
+        OPCODE_R_ARITH: begin
+            ALUOp     = ALUOP_ARITH;
+            RegWrite  = 1'b1;
+        end
 
-//==============================================================================
-// Decoder Stage
-//-------------------------------------------------------------------------*-*-*
-// RegWrite
-//-------------------------------------------------------------------------*-*-*
+        OPCODE_I_ARITH: begin
+            ALUOp     = ALUOP_ARITH;
+            ALUSrcImm = 1'b1;
+            RegWrite  = 1'b1;
+        end
 
-//==============================================================================
-// Execute Stage
-//-------------------------------------------------------------------------*-*-*
-// ALUOp, ALUSrc
-//-------------------------------------------------------------------------*-*-*
+        OPCODE_I_LOAD: begin
+            ALUSrcImm = 1'b1;
+            MemRead   = 1'b1;
+            RegWrite  = 1'b1;
+            MemtoReg  = 1'b1;
+        end
 
-/*
-    ALUOp ----
-*/
+        OPCODE_S_STORE: begin
+            ALUSrcImm = 1'b1;
+            MemWrite  = 1'b1;
+        end
 
-/*
-    ALUSrc ----
-*/
+        OPCODE_B_BRANCH: begin
+            ALUOp     = ALUOP_BRANCH;
+            ALUSrcPC  = 1'b1;
+            ALUSrcImm = 1'b1;
+            Branch    = 1'b1;
+        end
 
-//==============================================================================
-// Memory Stage
-//-------------------------------------------------------------------------*-*-*
-// MemRead, MemWrite, MemtoReg
-//-------------------------------------------------------------------------*-*-*
+        OPCODE_J_JAL: begin
+            ALUSrcPC  = 1'b1;
+            ALUSrcImm = 1'b1;
+            Jump      = 1'b1;
+            RegWrite  = 1'b1;
+            LinktoReg = 1'b1;
+        end
 
+        OPCODE_I_JALR: begin
+            ALUSrcImm = 1'b1;
+            Jump      = 1'b1;
+            RegWrite  = 1'b1;
+            LinktoReg = 1'b1;
+        end
 
-//==============================================================================
-// Instruction Specific for Signal Muxing
-//-------------------------------------------------------------------------*-*-*
-// AUIPC, JAL, JALr, LUI
-//-------------------------------------------------------------------------*-*-*
+        OPCODE_U_LUI: begin
+            ALUSrcImm = 1'b1;
+            RegWrite  = 1'b1;
+        end
 
+        OPCODE_U_AUIPC: begin
+            ALUSrcPC  = 1'b1;
+            ALUSrcImm = 1'b1;
+            RegWrite  = 1'b1;
+        end
+    endcase
+end
 
+assign ctrl_ALUOp_o         = ALUOp;
+assign ctrl_ALUSrcPC_o      = ALUSrcPC;
+assign ctrl_ALUSrcImm_o     = ALUSrcImm;
+assign ctrl_MemRead_o       = MemRead;
+assign ctrl_MemWrite_o      = MemWrite;
+assign ctrl_MemtoReg_o      = MemtoReg;
+assign ctrl_LinktoReg_o     = LinktoReg;
+assign ctrl_Branch_o        = Branch;
+assign ctrl_Jump_o          = Jump;
+assign ctrl_RegWrite_o      = RegWrite;
 
 endmodule
-
-// always @(*) begin
-//     casez ({opcode, funct7, funct3})
-//         {OPCODE_U_LUI,      7'b???????, 3'b???  }:
-//         {OPCODE_U_AUIPC,    7'b???????, 3'b???  }:
-//         {OPCODE_J_JAL,      7'b???????, 3'b???  }:
-
-//         {OPCODE_B_TYPE,     7'b???????, F3_BEQ }:
-//         {OPCODE_B_TYPE,     7'b???????, F3_BNE }:
-//         {OPCODE_B_TYPE,     7'b???????, F3_BLT }:
-//         {OPCODE_B_TYPE,     7'b???????, F3_BGE }:
-//         {OPCODE_B_TYPE,     7'b???????, F3_BLTU}:
-//         {OPCODE_B_TYPE,     7'b???????, F3_BGEU}:
-
-//         {OPCODE_I_JALR,     7'b???????, F3_JALR }:
-
-//         {OPCODE_I_LOAD,     7'b???????, F3_LB   }:
-//         {OPCODE_I_LOAD,     7'b???????, F3_LH   }:
-//         {OPCODE_I_LOAD,     7'b???????, F3_LW   }:
-//         {OPCODE_I_LOAD,     7'b???????, F3_LBU  }:
-//         {OPCODE_I_LOAD,     7'b???????, F3_LHU  }:
-
-//         {OPCODE_I_ARITH,    7'b???????, F3_ADDI }:
-//         {OPCODE_I_ARITH,    7'b???????, F3_SLTI }:
-//         {OPCODE_I_ARITH,    7'b???????, F3_SLTIU}:
-//         {OPCODE_I_ARITH,    7'b???????, F3_XORI }:
-//         {OPCODE_I_ARITH,    7'b???????, F3_ORI  }:
-//         {OPCODE_I_ARITH,    7'b???????, F3_ANDI }:
-
-//         {OPCODE_S_TYPE,     7'b???????, F3_SB   }:
-//         {OPCODE_S_TYPE,     7'b???????, F3_SH   }:
-//         {OPCODE_S_TYPE,     7'b???????, F3_SW   }:
-
-//         {OPCODE_I_SHIFT,    F7_SLLI,    F3_SLLI }:
-//         {OPCODE_I_SHIFT,    F7_SRLI,    F3_SRLI }:
-//         {OPCODE_I_SHIFT,    F7_SRAI,    F3_SRAI }:
-
-//         {OPCODE_R_ARITH,    F7_ADD,     F3_ADD  }:
-//         {OPCODE_R_ARITH,    F7_SUB,     F3_SUB  }:
-//         {OPCODE_R_ARITH,    F7_SLL,     F3_SLL  }:
-//         {OPCODE_R_ARITH,    F7_SLT,     F3_SLT  }:
-//         {OPCODE_R_ARITH,    F7_SLTU,    F3_SLTU }:
-//         {OPCODE_R_ARITH,    F7_XOR,     F3_XOR  }:
-//         {OPCODE_R_ARITH,    F7_SRL,     F3_SRL  }:
-//         {OPCODE_R_ARITH,    F7_SRA,     F3_SRA  }:
-//         {OPCODE_R_ARITH,    F7_OR,      F3_OR   }:
-//         {OPCODE_R_ARITH,    F7_AND,     F3_AND  }:
-//     endcase
-// end
