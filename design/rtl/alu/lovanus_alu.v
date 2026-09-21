@@ -95,7 +95,6 @@ lovanus_branch_comp u_lovanus_branch_comp (
     ,.dec_rdata2_i          ( dec_rdata2_i  )
 
     ,.ctrl_Branch_i         ( ctrl_Branch_i )
-
     ,.funct3_i              ( funct3_i      )
 
     ,.branch_taken_o        ( branch_taken_o)

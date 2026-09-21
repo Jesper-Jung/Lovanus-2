@@ -29,9 +29,9 @@
 module lovanus_alu_core #(
      parameter                  XLEN        = 32
 
-    ,parameter                  ALUOP_W  	= 2
+    ,parameter                  ALUOP_W     = 2
     ,parameter                  ALU_CTRL_W  = 4
-	,parameter					SHAMT_W		= 4
+    ,parameter                  SHAMT_W     = 4
 ) (
      input           [XLEN-1:0] op_a_i
     ,input           [XLEN-1:0] op_b_i
@@ -43,28 +43,28 @@ module lovanus_alu_core #(
 
 reg [XLEN-1:0] result;
 
-wire signed [XLEN-1:0] 		op_a_sgn;
-wire signed [XLEN-1:0] 		op_b_sgn;
-wire		[SHAMT_W-1:0]	shamt;
+wire signed [XLEN-1:0]      op_a_sgn;
+wire signed [XLEN-1:0]      op_b_sgn;
+wire        [SHAMT_W-1:0]   shamt;
 
 assign op_a_sgn = op_a_i;
 assign op_b_sgn = op_b_i;
-assign shamt 	= op_b_i[0 +: SHAMT_W];
+assign shamt    = op_b_i[0 +: SHAMT_W];
 
 always @(*) begin
-	result = {XLEN{1'b0}};
-	case (alu_ctrl_i)
-		ALU_CTRL_ADD 	: result = (op_a_i   +   op_b_i  );
-		ALU_CTRL_SUB 	: result = (op_a_i   -   op_b_i  );
-		ALU_CTRL_AND 	: result = (op_a_i   &   op_b_i  );
-		ALU_CTRL_OR  	: result = (op_a_i   |   op_b_i  );
-		ALU_CTRL_XOR 	: result = (op_a_i   ^   op_b_i  );
-		ALU_CTRL_SLL 	: result = (op_a_i   <<  shamt   );
-		ALU_CTRL_SRL 	: result = (op_a_i   >>  shamt   );
-		ALU_CTRL_SRA 	: result = (op_a_sgn >>> shamt   );
-		ALU_CTRL_SLT 	: result = (op_a_sgn <   op_b_sgn);
-		ALU_CTRL_SLTU	: result = (op_a_i   <   op_b_i  );
-	endcase
+    result = {XLEN{1'b0}};
+    case (alu_ctrl_i)
+        ALU_CTRL_ADD    : result = (op_a_i   +   op_b_i  );
+        ALU_CTRL_SUB    : result = (op_a_i   -   op_b_i  );
+        ALU_CTRL_AND    : result = (op_a_i   &   op_b_i  );
+        ALU_CTRL_OR     : result = (op_a_i   |   op_b_i  );
+        ALU_CTRL_XOR    : result = (op_a_i   ^   op_b_i  );
+        ALU_CTRL_SLL    : result = (op_a_i   <<  shamt   );
+        ALU_CTRL_SRL    : result = (op_a_i   >>  shamt   );
+        ALU_CTRL_SRA    : result = (op_a_sgn >>> shamt   );
+        ALU_CTRL_SLT    : result = (op_a_sgn <   op_b_sgn);
+        ALU_CTRL_SLTU   : result = (op_a_i   <   op_b_i  );
+    endcase
 end
 
 assign result_o = result;
