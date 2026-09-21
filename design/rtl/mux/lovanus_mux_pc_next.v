@@ -30,28 +30,16 @@
 module u_lovanus_mux_pc_next #(
      parameter              XLEN    = 32
 ) (
-     input       [XLEN-1:0] pc_i
-    ,input       [XLEN-1:0] alu_result_i
+     input       [XLEN-1:0] pc_plus4_i            // Default
+    ,input       [XLEN-1:0] alu_result_i          // Always `pc + imm` which is selected when branch or jump
 
-    ,input                  branch_taken_i
-    ,input                  ctrl_Jump_i
+    ,input                  branch_taken_i        // Assert if branch is taken from branch comparator
+    ,input                  ctrl_Jump_i           // Assert if the current instruction executes jump (JAL, JALR)
 
     ,output      [XLEN-1:0] pc_next_o
-    ,output      [XLEN-1:0] pc_plus4_o
 );
 
-wire                jump_en;
-
-wire     [XLEN-1:0] pc_jump;
-wire     [XLEN-1:0] pc_plus4;
-
 // Assign
-assign jump_en      = ( ctrl_Jump_i | branch_taken_i );
-
-assign pc_jump      = ( pc_i + imm_ext_i    );
-assign pc_plus4     = ( pc_i + 32'h4        );
-
-assign pc_next_o    = ( jump_en    ) ?  pc_jump   : pc_plus4;
-assign pc_plus4_o   =                   pc_plus4            ;
+assign pc_next_o    = ( ctrl_Jump_i | branch_taken_i ) ?  alu_result_i   : pc_plus4_i;
 
 endmodule

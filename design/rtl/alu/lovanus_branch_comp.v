@@ -29,7 +29,7 @@ module lovanus_branch_comp #(
      input           [XLEN-1:0] dec_rdata1_i
     ,input           [XLEN-1:0] dec_rdata2_i
 
-    ,input       [ALU_OP_W-1:0] ctrl_Branch_i
+    ,input                      ctrl_Branch_i
     ,input       [FUNCT3_W-1:0] funct3_i
 
     ,output                     branch_taken_o
