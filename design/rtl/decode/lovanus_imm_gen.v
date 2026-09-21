@@ -62,8 +62,8 @@ always @(*) begin
 
     (* parallel_case *) case (opcode_i)
         OPCODE_I_ARITH, OPCODE_I_LOAD, OPCODE_I_JALR    : imm_I_match = 1'b1;
-        OPCODE_S_TYPE                                   : imm_S_match = 1'b1;
-        OPCODE_B_TYPE                                   : imm_B_match = 1'b1;
+        OPCODE_S_STORE                                  : imm_S_match = 1'b1;
+        OPCODE_B_BRANCH                                 : imm_B_match = 1'b1;
         OPCODE_U_LUI, OPCODE_U_AUIPC                    : imm_U_match = 1'b1;
         OPCODE_J_JAL                                    : imm_J_match = 1'b1;
         default                                         : ;

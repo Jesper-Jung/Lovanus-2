@@ -12,9 +12,9 @@
 //
 //  * Module Name   : u_lovanus_alu
 //  * Author        : Jesper
-//  * Purpose       : Calculate .
+//  * Purpose       : Execute to operate on two input operands and determine if the branch is taken
 //
-//  * Note          :
+//  * Note
 //      | RV32I Base Inst set,
 //          R-TYPE      // ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
 //          I-TYPE      // JALR, LB, LH, LW, LBU, LHU, ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI
@@ -34,11 +34,11 @@ module lovanus_alu #(
     ,parameter              ALUOP_W     = 2
     ,parameter              ALU_CTRL_W  = 4
 
-    ,parameter              OPCODE_W    = 7
     ,parameter              FUNCT7_W    = 7
     ,parameter              FUNCT3_W    = 3
 ) (
-    ,input       [XLEN-1:0] instr_i
+    ,input   [FUNCT7_W-1:0] funct7_i
+    ,input   [FUNCT3_W-1:0] funct3_i
 
     ,input    [ALUOP_W-1:0] ctrl_ALUOp_i
     ,input                  ctrl_ALUSrcPC_i
@@ -57,10 +57,6 @@ module lovanus_alu #(
 
 `include "lovanus_alu_ctrl.vh"
 
-wire opcode = instr_i[ 6: 0];
-wire funct7 = instr_i[31:25];
-wire funct3 = instr_i[14:12];
-
 wire [ALU_CTRL_W-1:0] alu_ctrl;
 
 wire [XLEN-1:0] op_a_muxed;
@@ -72,8 +68,8 @@ wire [XLEN-1:0] op_b_muxed;
 
 lovanus_alu_ctrl u_lovanus_alu_ctrl (
      .ctrl_ALUOp_i          ( ctrl_ALUOp_i  )
-    ,.funct7_i              ( funct7        )
-    ,.funct3_i              ( funct3        )
+    ,.funct7_i              ( funct7_i      )
+    ,.funct3_i              ( funct3_i      )
 
     ,.alu_ctrl_o            ( alu_ctrl      )
 );
@@ -100,7 +96,7 @@ lovanus_branch_comp u_lovanus_branch_comp (
 
     ,.ctrl_Branch_i         ( ctrl_Branch_i )
 
-    ,.funct3_i              ( funct3        )
+    ,.funct3_i              ( funct3_i      )
 
     ,.branch_taken_o        ( branch_taken_o)
 );

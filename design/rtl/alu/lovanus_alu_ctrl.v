@@ -59,8 +59,8 @@ reg [ALU_CTRL_W-1:0] alu_ctrl;
 
 always @(*) begin
     alu_ctrl = ALU_CTRL_ADD;
-    if      ( ctrl_ALUOP_i == ALUOP_BRANCH  ) alu_ctrl = ALU_CTRL_SUB;
-    else if ( ctrl_ALUOP_i == ALUOP_ARITH   ) begin
+    if      ( ctrl_ALUOp_i == ALUOP_BRANCH  ) alu_ctrl = ALU_CTRL_SUB;
+    else if ( ctrl_ALUOp_i == ALUOP_ARITH   ) begin
         case ({funct7_i, funct3_i})
             // R-Type
             {F7_ADD,    F3_ADD  }  : alu_ctrl = ALU_CTRL_ADD;

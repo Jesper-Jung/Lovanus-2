@@ -23,23 +23,22 @@
 //=================================================================* * * * *---*
 
 module lovanus_regf_1w2r #(
-     parameter                  DATA_W = 32
+     parameter                  XLEN         = 32
 ) (
      input                      clk_i
     ,input                      rst_ni
     ,input                      write_en
 
     ,input                [4:0] waddr_i
-    ,input         [DATA_W-1:0] wdata_i
+    ,input           [XLEN-1:0] wdata_i
 
     ,input                [4:0] raddr1_i
-    ,output reg    [DATA_W-1:0] rdata1_o
+    ,output reg      [XLEN-1:0] rdata1_o
 
     ,input                [4:0] raddr2_i
-    ,output reg    [DATA_W-1:0] rdata2_o
+    ,output reg      [XLEN-1:0] rdata2_o
 );
 
-localparam XLEN         = 32;
 localparam REG_NUM      = 32;
 
 //==============================================================================
@@ -59,10 +58,9 @@ always @(posedge clk_i or negedge rst_ni) begin
     end
 end
 
-// TODO: :reg:`rdata` will be replaced as F/F output with core pipelining after.
 always @(*) begin
     rdata1_o = r_mem_regf[raddr1_i];
-    rdata2_o = r_mem_regf[raddr1_i];
+    rdata2_o = r_mem_regf[raddr2_i];
 end
 
 //==============================================================================

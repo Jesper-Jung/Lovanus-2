@@ -14,7 +14,7 @@
 //  * Author        : Jesper
 //  * Purpose       : Generate control signal following instruction
 //
-//  * Note          :
+//  * Note
 //      | Each control signals generates depending on the opcode.
 //      | Control Signal Look-up Table ----
 //
