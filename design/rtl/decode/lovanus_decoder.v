@@ -45,9 +45,12 @@ module lovanus_decoder #(
     ,output                 ctrl_MemWrite_o
     ,output                 ctrl_MemtoReg_o
     ,output                 ctrl_LinktoReg_o
-    ,output                 ctrl_JumpB_o
-    ,output                 ctrl_JumpJ_o
+    ,output                 ctrl_Branch_o
+    ,output                 ctrl_Jump_o
     ,output                 ctrl_RegWrite_o
+
+    ,output  [FUNCT7_W-1:0] funct7_o
+    ,output  [FUNCT3_W-1:0] funct3_o
 
     //--------------------------------------
     // ## Register File, 1w2r ##
@@ -109,9 +112,12 @@ lovanus_ctrl_unit #(
     ,.ctrl_MemWrite_o   ( ctrl_MemWrite_o   )
     ,.ctrl_MemtoReg_o   ( ctrl_MemtoReg_o   )
     ,.ctrl_LinktoReg_o  ( ctrl_LinktoReg_o  )
-    ,.ctrl_JumpB_o      ( ctrl_JumpB_o      )
-    ,.ctrl_JumpJ_o      ( ctrl_JumpJ_o      )
+    ,.ctrl_Branch_o     ( ctrl_Branch_o     )
+    ,.ctrl_Jump_o       ( ctrl_Jump_o       )
     ,.ctrl_RegWrite_o   ( ctrl_RegWrite_o   )
 );
+
+assign funct3_o = funct3;
+assign funct7_o = funct7;
 
 endmodule

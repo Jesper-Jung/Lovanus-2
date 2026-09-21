@@ -27,7 +27,7 @@ module lovanus_regf_1w2r #(
 ) (
      input                      clk_i
     ,input                      rst_ni
-    ,input                      write_en
+    ,input                      write_en_i
 
     ,input                [4:0] waddr_i
     ,input           [XLEN-1:0] wdata_i
@@ -53,7 +53,7 @@ always @(posedge clk_i or negedge rst_ni) begin
             r_mem_regf[i] <= {XLEN{1'b0}};
     end
     else begin
-        if (write_en)
+        if (write_en_i)
             r_mem_regf <= #1 wdata_i;
     end
 end
