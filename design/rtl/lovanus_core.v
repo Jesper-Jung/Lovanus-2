@@ -10,7 +10,7 @@
 //   .         .         .          .          .          .          + Lovanus-2 +  .
 //             +                   +                      +                   +   
 //
-//  * Module Name   : u_lovanus_mux_pc_next
+//  * Module Name   : u_lovanus_core
 //  * Author        : Jesper
 //  * Purpose       : Calculate next value of PC
 //
