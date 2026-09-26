@@ -174,6 +174,10 @@ lovanus_mux_pc_next u_lovanus_mux_pc_next (
 );
 
 // Memory
+
+
+
+
 data_mem u_data_mem (
      .clk_i                     ( clk_i             )
     ,.rst_ni                    ( rst_ni            )
@@ -186,15 +190,16 @@ data_mem u_data_mem (
     ,.rdata_o                   ( mem_rdata         )
 );
 
-lovanus_mux_regf_wdata u_lovanus_mux_regf_wdata (
+lovanus_wb_formatter u_wb_formatter (
      .alu_result_i              ( alu_result        )
     ,.mem_rdata_i               ( mem_rdata         )
     ,.pc_plus4_i                ( pc_plus4          )
 
+    ,.ctrl_MemZeroExt_i         ( ctrl_MemZeroExt   )
     ,.ctrl_MemtoReg_i           ( ctrl_MemtoReg     )
     ,.ctrl_LinktoReg_i          ( ctrl_LinktoReg    )
 
-    ,.regf_wdata_o              ( regf_wdata_muxed  )
+    ,.regf_wdata_o              ( wdata_formatted   )
 );
 
 endmodule
