@@ -50,7 +50,7 @@ reg [XLEN-1:0] mem_rdata_fmt;
 //-------------------------------------------------------------------------*-*-*
 
 always @(*) begin
-    casez ({ctrl_MemDataSize_i, ctrl_MemZeroExt_i, addr_offset_i})
+    casez ({mctrl_DataSize_i, mctrl_ZeroExt_i, addr_offset_i})
         {HSIZE_BYTE, 1'b0, 2'b00}       : mem_rdata_fmt = {24{1'b0}, mem_rdata_i[7:0]};
         {HSIZE_BYTE, 1'b0, 2'b01}       : mem_rdata_fmt = {24{1'b0}, mem_rdata_i[15:8]};
         {HSIZE_BYTE, 1'b0, 2'b10}       : mem_rdata_fmt = {24{1'b0}, mem_rdata_i[23:16]};
